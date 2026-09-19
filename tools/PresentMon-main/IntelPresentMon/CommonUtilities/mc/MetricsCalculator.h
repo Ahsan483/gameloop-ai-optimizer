@@ -1,0 +1,67 @@
+// Copyright (C) 2026 Intel Corporation
+// SPDX-License-Identifier: MIT
+#pragma once
+#include <cstdint>
+#include <optional>
+#include <vector>
+#include "../qpc.h"
+#include "MetricsTypes.h"
+#include "SwapChainState.h"
+
+namespace pmon::util::metrics
+{
+    // Result of metric calculation for one display index
+    struct ComputedMetrics {
+        FrameMetrics metrics;
+
+        // State changes to apply to SwapChain
+        struct StateDeltas {
+            std::optional<double> newInput2FrameStartEma;
+            std::optional<double> newAccumulatedInput2FrameStart;
+            std::optional<uint64_t> newLastReceivedPclSimStart;
+            std::optional<uint64_t> lastReceivedNotDisplayedAllInputTime;
+            std::optional<uint64_t> lastReceivedNotDisplayedMouseClickTime;
+            std::optional<uint64_t> lastReceivedNotDisplayedAppProviderInputTime;
+            bool shouldResetInputTimes = false;
+        } stateDeltas;
+    };
+
+    std::vector<ComputedMetrics> ComputeMetricsForPresent(
+        const QpcConverter& qpc,
+        FrameData& present,
+        SwapChainCoreState& chainState);
+
+    ComputedMetrics ComputeMetricsForReadyDisplayRow(
+        const QpcConverter& qpc,
+        const ReadyDisplayRow& row,
+        SwapChainCoreState& chainState);
+
+    // === Pure Calculation Functions ===
+
+    ComputedMetrics ComputeFrameMetrics(
+        const QpcConverter& qpc,
+        const FrameData& present,
+        uint64_t previousDisplayedScreenTime,
+        uint64_t screenTime,
+        uint64_t nextScreenTime,
+        bool isDisplayed,
+        bool isAppFrame,
+        FrameType frameType,
+        const AnimationDisplayContext& animation,
+        const SwapChainCoreState& chain);
+
+    // Helper: Calculate CPU start time for the current present.
+    // When ingestPreviousPresent is set (Ingest path), use that present's end instead of
+    // swap chain history, which only advances on Apply after held rows are released.
+    uint64_t CalculateCPUStart(
+        const SwapChainCoreState& chainState,
+        const FrameData& present,
+        const FrameData* ingestPreviousPresent = nullptr);
+
+    // Elapsed animation time from firstAppSimStartTime (or session QPC) to currentSimTime.
+    // Returns missing when currentSimTime is not after the baseline (non-transition rows never emit 0).
+    double CalculateAnimationTime(
+        const QpcConverter& qpc,
+        uint64_t firstAppSimStartTime,
+        uint64_t currentSimTime);
+}

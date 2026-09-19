@@ -1,0 +1,22 @@
+// Copyright (C) 2022 Intel Corporation
+// SPDX-License-Identifier: MIT
+#pragma once
+#include <string>
+#include <format>
+#include "igcl/igcl_api.h"
+#include "../CommonUtilities/log/Log.h"
+
+namespace pmon::tel::log
+{
+    inline std::string MakeErrorLocationString(int line, const char* file, const char* function)
+    {
+        return std::format("{} at {}:{}", function, file, line);
+    }
+
+    inline std::string MakeTelemetryDebugErrorString(const char* msg, int line, const char* file, const char* function)
+    {
+        return std::format("(TEL) {} in {}\n", msg, MakeErrorLocationString(line, file, function));
+    }
+}
+
+#define TELE_ERR(msg) pmlog_error(msg)

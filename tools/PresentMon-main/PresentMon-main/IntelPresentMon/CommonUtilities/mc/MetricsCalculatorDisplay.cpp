@@ -1,0 +1,159 @@
+// Copyright (C) 2026 Intel Corporation
+// SPDX-License-Identifier: MIT
+#include "MetricsCalculator.h"
+#include "MetricsCalculatorInternal.h"
+
+#include <PresentData/PresentMonTraceConsumer.hpp>
+#include "../Math.h"
+
+namespace pmon::util::metrics
+{
+    namespace
+    {
+        // ---- Display metrics ----
+        double ComputeMsUntilDisplayed(
+            const QpcConverter& qpc,
+            const FrameData& present,
+            bool isDisplayed,
+            uint64_t screenTime)
+        {
+            return isDisplayed
+                ? qpc.DeltaUnsignedMilliSeconds(present.presentStartTime, screenTime)
+                : 0.0;
+        }
+
+
+        // Helper dedicated to computing msBetweenDisplayChange, matching legacy ReportMetricsHelper behavior.
+        double ComputeMsBetweenDisplayChange(
+            const QpcConverter& qpc,
+            uint64_t previousDisplayedScreenTime,
+            bool isDisplayed,
+            uint64_t screenTime)
+        {
+            return isDisplayed
+                ? qpc.DeltaUnsignedMilliSeconds(previousDisplayedScreenTime, screenTime)
+                : 0.0;
+        }
+
+
+        // Helper dedicated to computing msDisplayedTime, matching legacy ReportMetricsHelper behavior.
+        double ComputeMsDisplayedTime(
+            const QpcConverter& qpc,
+            bool isDisplayed,
+            uint64_t screenTime,
+            uint64_t nextScreenTime)
+        {
+            return isDisplayed
+                ? qpc.DeltaUnsignedMilliSeconds(screenTime, nextScreenTime)
+                : 0.0;
+        }
+
+        
+        double ComputeMsFlipDelay(
+            const QpcConverter& qpc,
+            const FrameData& present,
+            bool isDisplayed)
+        {
+            if (isDisplayed && present.flipDelay != 0) {
+                return qpc.DurationMilliSeconds(present.flipDelay);
+            }
+            return MissingFrameMetricValue();
+        }
+
+
+        double ComputeMsDisplayLatency(
+            const QpcConverter& qpc,
+            const SwapChainCoreState& swapChain,
+            const FrameData& present,
+            bool isDisplayed,
+            uint64_t screenTime)
+        {
+            const auto cpuStart = CalculateCPUStart(swapChain, present);
+            return (isDisplayed && cpuStart != 0)
+                ? qpc.DeltaUnsignedMilliSeconds(cpuStart, screenTime)
+                : 0.0;
+        }
+
+
+        double ComputeMsReadyTimeToDisplayLatency(
+            const QpcConverter& qpc,
+            const FrameData& present,
+            bool isDisplayed,
+            uint64_t screenTime)
+        {
+            if (isDisplayed && present.readyTime != 0) {
+                return qpc.DeltaUnsignedMilliSeconds(present.readyTime, screenTime);
+            }
+            return MissingFrameMetricValue();
+        }
+
+        std::pair<uint32_t, uint32_t> GetDisplayId(const FrameData& present)
+        {
+            auto vidPnSourceId = uint32_t(present.vidPnLayerId >> 32); // vidPnSourceId
+            auto layerIndex = uint32_t(present.vidPnLayerId & 0xFFFFFFFF); // layerIndex
+            return {vidPnSourceId, layerIndex};
+        }
+    }
+
+    // ---- NV collapsed/runt correction ----
+    void AdjustScreenTimeForCollapsedPresentNV(
+        FrameData& present,
+        FrameData* nextDisplayedPresent,
+        const uint64_t& lastDisplayedFlipDelay,
+        const uint64_t& lastDisplayedScreenTime,
+        uint64_t& screenTime,
+        uint64_t& nextScreenTime,
+        MetricsVersion version)
+    {
+        if (version == MetricsVersion::V1) {
+            // NV1 collapsed/runt correction: legacy V1 adjusts the *current* present using the
+            // previous displayed state when the last displayed screen time (adjusted by flip delay)
+            // is greater than this present's screen time.
+            if (lastDisplayedFlipDelay > 0 &&
+                lastDisplayedScreenTime > screenTime &&
+                !present.displayed.Empty()) {
+
+                const uint64_t diff = lastDisplayedScreenTime - screenTime;
+                present.flipDelay += diff;
+                present.displayed[0].second = lastDisplayedScreenTime;
+                screenTime = present.displayed[0].second;
+            }
+            return;
+        }
+
+        // nextDisplayedPresent should always be non-null for NV GPU.
+        if (present.flipDelay && screenTime > nextScreenTime && nextDisplayedPresent) {
+            // If screenTime that is adjusted by flipDelay is larger than nextScreenTime,
+            // it implies this present is a collapsed present, or a runt frame.
+            // So we adjust the screenTime and flipDelay of nextDisplayedPresent,
+            // effectively making nextScreenTime equals to screenTime.
+
+            nextDisplayedPresent->flipDelay += (screenTime - nextScreenTime);
+            nextScreenTime = screenTime;
+            nextDisplayedPresent->displayed[0].second = nextScreenTime;
+        }
+    }
+
+
+    void CalculateDisplayMetrics(
+        const QpcConverter& qpc,
+        const FrameData& present,
+        const SwapChainCoreState& swapChain,
+        uint64_t previousDisplayedScreenTime,
+        bool isDisplayed,
+        uint64_t screenTime,
+        uint64_t nextScreenTime,
+        FrameMetrics& metrics)
+    {
+        metrics.msUntilDisplayed = ComputeMsUntilDisplayed(qpc, present, isDisplayed, screenTime);
+        metrics.msBetweenDisplayChange = ComputeMsBetweenDisplayChange(qpc, previousDisplayedScreenTime, isDisplayed, screenTime);
+        metrics.msDisplayedTime = ComputeMsDisplayedTime(qpc, isDisplayed, screenTime, nextScreenTime);
+        metrics.msFlipDelay = ComputeMsFlipDelay(qpc, present, isDisplayed);
+        metrics.msDisplayLatency = ComputeMsDisplayLatency(qpc, swapChain, present, isDisplayed, screenTime);
+        metrics.msReadyTimeToDisplayLatency = ComputeMsReadyTimeToDisplayLatency(qpc, present, isDisplayed, screenTime);
+        metrics.isDroppedFrame = !isDisplayed;
+        metrics.screenTimeQpc = screenTime;
+        metrics.displayId = GetDisplayId(present);
+        metrics.presentId = present.presentId;
+    }
+}

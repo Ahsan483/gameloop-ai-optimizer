@@ -1,0 +1,8 @@
+﻿#pragma once
+#include "OpenSession.h"
+#include "SetCapture.h"
+#include "Introspect.h"
+#include "PushSpecification.h"
+#include "BindHotkey.h"
+#include "ClearHotkey.h"
+#include "SetEtlLogging.h"

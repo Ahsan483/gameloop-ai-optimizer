@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Adl">
+      <UniqueIdentifier>{7be1b9fe-f3a5-48d2-b9f7-4b1ffa529257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Intel">
+      <UniqueIdentifier>{6fdc92dc-eee8-4ed8-8d24-9005f36520e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nvidia">
+      <UniqueIdentifier>{b9383b96-c78b-4e0f-bd7a-bb9eace086ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wmi">
+      <UniqueIdentifier>{a6df2cb9-9e2a-46e5-8adb-ff8f258e2a36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Uci">
+      <UniqueIdentifier>{6db4e810-a194-46a6-ac19-44e86c4b2645}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mock">
+      <UniqueIdentifier>{c4e8f1a2-3b5d-4e6f-9a0c-1d2e3f4a5b6c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="adl\adl_defines.h">
+      <Filter>Adl</Filter>
+    </ClInclude>
+    <ClInclude Include="adl\adl_sdk.h">
+      <Filter>Adl</Filter>
+    </ClInclude>
+    <ClInclude Include="adl\adl_structures.h">
+      <Filter>Adl</Filter>
+    </ClInclude>
+    <ClInclude Include="nvapi\nvapi_interface_table.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="nvapi\nvapi.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="nvapi\NvapiWrapper.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="nvapi\NvapiTelemetryProvider.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="nvml\NvmlTelemetryProvider.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="nvml\NvmlWrapper.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="MacroHelpers.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="DllModule.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="adl\Adl2Wrapper.h">
+      <Filter>Adl</Filter>
+    </ClInclude>
+    <ClInclude Include="adl\AdlTelemetryProvider.h">
+      <Filter>Adl</Filter>
+    </ClInclude>
+    <ClInclude Include="Logging.h" />
+    <ClInclude Include="Exceptions.h" />
+    <ClInclude Include="TelemetryCoordinator.h" />
+    <ClInclude Include="TelemetryDeviceFingerprint.h" />
+    <ClInclude Include="TelemetryProvider.h" />
+    <ClInclude Include="EndpointCache.h" />
+    <ClInclude Include="igcl\IgclTelemetryProvider.h">
+      <Filter>Intel</Filter>
+    </ClInclude>
+    <ClInclude Include="igcl\IgclErrorCodeProvider.h">
+      <Filter>Intel</Filter>
+    </ClInclude>
+    <ClInclude Include="igcl\igcl_api.h">
+      <Filter>Intel</Filter>
+    </ClInclude>
+    <ClInclude Include="nvml\nvml.h">
+      <Filter>Nvidia</Filter>
+    </ClInclude>
+    <ClInclude Include="mock\MockTelemetryProvider.h">
+      <Filter>Mock</Filter>
+    </ClInclude>
+    <ClInclude Include="wmi\WmiTelemetryProvider.h">
+      <Filter>Wmi</Filter>
+    </ClInclude>
+    <ClInclude Include="uci\UciTelemetryProvider.h">
+      <Filter>Uci</Filter>
+    </ClInclude>
+    <ClInclude Include="uci\UciSdk.h">
+      <Filter>Uci</Filter>
+    </ClInclude>
+    <ClInclude Include="uci\UciWrapper.h">
+      <Filter>Uci</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nvapi\NvapiWrapper.cpp">
+      <Filter>Nvidia</Filter>
+    </ClCompile>
+    <ClCompile Include="nvapi\NvapiTelemetryProvider.cpp">
+      <Filter>Nvidia</Filter>
+    </ClCompile>
+    <ClCompile Include="nvml\NvmlWrapper.cpp">
+      <Filter>Nvidia</Filter>
+    </ClCompile>
+    <ClCompile Include="nvml\NvmlTelemetryProvider.cpp">
+      <Filter>Nvidia</Filter>
+    </ClCompile>
+    <ClCompile Include="adl\Adl2Wrapper.cpp">
+      <Filter>Adl</Filter>
+    </ClCompile>
+    <ClCompile Include="adl\AdlTelemetryProvider.cpp">
+      <Filter>Adl</Filter>
+    </ClCompile>
+    <ClCompile Include="igcl\IgclTelemetryProvider.cpp">
+      <Filter>Intel</Filter>
+    </ClCompile>
+    <ClCompile Include="TelemetryCoordinator.cpp" />
+    <ClCompile Include="TelemetryDeviceFingerprint.cpp" />
+    <ClCompile Include="igcl\cApiWrapper.cpp">
+      <Filter>Intel</Filter>
+    </ClCompile>
+    <ClCompile Include="igcl\IgclErrorCodeProvider.cpp">
+      <Filter>Intel</Filter>
+    </ClCompile>
+    <ClCompile Include="mock\MockTelemetryProvider.cpp">
+      <Filter>Mock</Filter>
+    </ClCompile>
+    <ClCompile Include="wmi\WmiTelemetryProvider.cpp">
+      <Filter>Wmi</Filter>
+    </ClCompile>
+    <ClCompile Include="uci\UciTelemetryProvider.cpp">
+      <Filter>Uci</Filter>
+    </ClCompile>
+    <ClCompile Include="uci\UciWrapper.cpp">
+      <Filter>Uci</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
