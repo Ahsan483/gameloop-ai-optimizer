@@ -1,0 +1,45 @@
+<ConfigFilePath Enable="1" Version="427">
+	<file name="apk_44.conf" tag="ApkConf_44" path="UI">
+	</file>
+	<file name="opengl.conf" tag="OpenglConf" path="UI">
+	</file>
+	<file name="render.dat" tag="RenderConf" path="UI">
+	</file>
+	<file name="translate.conf" tag="TranslateConf" path="UI">
+	</file>
+	<file name="DefaultKeyMapping.xml" tag="DefaultKeyMappingXml" path="UI">
+	</file>
+	<file name="hardinput.conf" tag="HardInput" path="UI">
+	</file>
+	<file name="hardinput2.conf" tag="HardInput2" path="UI">
+	</file>
+	<file name="wztimer.conf" tag="wztimerConf" path="UI">
+	</file>
+	<file name="smk.conf" tag="smkConf" path="UI">
+	</file>
+	<file name="smka.conf" tag="smkaConf" path="UI">
+	</file>
+	<file name="HardwareDetect.xml" tag="HardwareDetectXml" path="UI">
+	</file>
+	<!--file name="AowGame.xml" tag="AowGame" path="AppMarket"/-->
+	<file name="AowConfig.ini" tag="AowConfig" path="UI">
+	</file>
+	<file name="SceneTips.xml" tag="SceneTips" path="UI">
+	</file>
+	<file name="GameSidebar.xml" tag="GameSidebar" path="UI">
+	</file>
+	<file name="whitelist.conf" tag="whitelist" path="UI">
+	</file>
+	<file name="multiDexApk.conf" tag="multiDexApk" path="UI">
+	</file>
+	<file name="cmd.conf" tag="CmdConf" path="UI">
+	</file>
+	<file name="inter.zip" tag="InterConf" path="UI">
+	</file>
+	<file name="aowgameex2.dat" tag="aowgameex2" path="AppMarket">
+	</file>
+	<file name="translateex.conf" tag="TranslateConfEX" path="UI">
+	</file>
+	<file name="block_rule.json" tag="BlockRule" path="UI">
+	</file>
+</ConfigFilePath>

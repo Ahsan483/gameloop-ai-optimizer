@@ -1,0 +1,17 @@
+﻿{
+    "created_at":  null,
+    "changes":  [
+                    {
+                        "experiment_id":  "game-mode-001",
+                        "timestamp":  "2026-09-19T17:37:48.5727407+05:00",
+                        "setting_changed":  "HKCU:\\Software\\Microsoft\\GameBar",
+                        "old_value":  "AllowAutoGameMode=; AutoGameModeEnabled=",
+                        "new_value":  "AllowAutoGameMode=1; AutoGameModeEnabled=1",
+                        "reason":  "Enable Windows Game Mode scheduling support; Ultimate Performance is already active.",
+                        "risk":  "Low",
+                        "reversible":  true,
+                        "expected_effect":  "Possible reduction in background scheduling interference; FPS improvement is not guaranteed."
+                    }
+                ],
+    "note":  "Only explicitly logged, reversible changes are permitted."
+}

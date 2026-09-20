@@ -1,0 +1,1 @@
+experiment_id,timestamp,setting_changed,old_value,new_value,average_fps,one_percent_low,frame_time_ms,gameloop_cpu_pct,system_ram_pct,gpu_utilization_pct,gpu_temperature_c,gpu_vram_used_mb,resolution,fps_setting,rendering_engine,graphics_settings,vsync,anti_aliasing,stutter_score,result
